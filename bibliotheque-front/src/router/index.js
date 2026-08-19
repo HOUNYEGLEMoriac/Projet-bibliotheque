@@ -1,136 +1,110 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-// ===== PAGES PUBLIQUES =====
-import Accueil from '@/views/public/Accueil.vue'
+// ── PUBLIC ───────────────────────────────────────────────
+import Home from '@/views/public/Home.vue'
 import Catalogue from '@/views/public/Catalogue.vue'
-import DetailLivre from '@/views/public/DetailLivre.vue'
-import Recherche from '@/views/public/Recherche.vue'
-import Inscription from '@/views/public/Inscription.vue'
-import Connexion from '@/views/public/Connexion.vue'
-import MotDePasseOublie from '@/views/public/MotDePasseOublie.vue'
+import BookDetail from '@/views/public/BookDetail.vue'
+import Search from '@/views/public/Search.vue'
+import Register from '@/views/public/Register.vue'
+import Login from '@/views/public/Login.vue'
+import ForgotPassword from '@/views/public/ForgotPassword.vue'
 
-// ===== PAGES ADHÉRENT =====
-import AdherentDashboard from '@/views/adherent/Dashboard.vue'
-import MesEmprunts from '@/views/adherent/MesEmprunts.vue'
-import MonHistorique from '@/views/adherent/MonHistorique.vue'
-import MesReservations from '@/views/adherent/MesReservations.vue'
-import MonProfil from '@/views/adherent/MonProfil.vue'
-import MesNotifications from '@/views/adherent/MesNotifications.vue'
+// ── MEMBER ───────────────────────────────────────────────
+import MemberDashboard from '@/views/member/Dashboard.vue'
+import MyLoans from '@/views/member/MyLoans.vue'
+import MyHistory from '@/views/member/MyHistory.vue'
+import MyReservations from '@/views/member/MyReservations.vue'
+import MyProfile from '@/views/member/MyProfile.vue'
+import MyNotifications from '@/views/member/MyNotifications.vue'
 
-// ===== PAGES ADMIN =====
+// ── ADMIN ────────────────────────────────────────────────
 import AdminDashboard from '@/views/admin/Dashboard.vue'
-import AdminLivres from '@/views/admin/livres/ListeLivres.vue'
-import AdminAjouterLivre from '@/views/admin/livres/AjouterLivre.vue'
-import AdminModifierLivre from '@/views/admin/livres/ModifierLivre.vue'
+import AdminBooks from '@/views/admin/books/BookList.vue'
+import AdminAddBook from '@/views/admin/books/BookAdd.vue'
+import AdminEditBook from '@/views/admin/books/BookEdit.vue'
 import AdminCategories from '@/views/admin/Categories.vue'
-import AdminAdherents from '@/views/admin/adherents/ListeAdherents.vue'
-import AdminDetailAdherent from '@/views/admin/adherents/DetailAdherent.vue'
-import AdminEmprunts from '@/views/admin/emprunts/ListeEmprunts.vue'
-import AdminEmpruntsRetard from '@/views/admin/emprunts/EmpruntsRetard.vue'
-import AdminRetour from '@/views/admin/emprunts/EnregistrerRetour.vue'
+import AdminMembers from '@/views/admin/members/MemberList.vue'
+import AdminMemberDetail from '@/views/admin/members/MemberDetail.vue'
+import AdminLoans from '@/views/admin/loans/LoanList.vue'
+import AdminLoansOverdue from '@/views/admin/loans/LoanOverdue.vue'
+import AdminReturn from '@/views/admin/loans/LoanReturn.vue'
 import AdminReservations from '@/views/admin/Reservations.vue'
-import AdminRelances from '@/views/admin/relances/ConfigRelances.vue'
-import AdminHistoriqueRelances from '@/views/admin/relances/HistoriqueRelances.vue'
-import AdminRapports from '@/views/admin/Rapports.vue'
+import AdminNotifications from '@/views/admin/notifications/NotificationConfig.vue'
+import AdminNotificationsHistory from '@/views/admin/notifications/NotificationHistory.vue'
+import AdminReports from '@/views/admin/Reports.vue'
 
-// ===== PAGES SYSTÈME =====
-import NotFound from '@/views/systeme/NotFound.vue'
-import Interdit from '@/views/systeme/Interdit.vue'
-import Erreur from '@/views/systeme/Erreur.vue'
+// ── SYSTEM ───────────────────────────────────────────────
+import NotFound from '@/views/system/NotFound.vue'
+import Forbidden from '@/views/system/Forbidden.vue'
+import ServerError from '@/views/system/ServerError.vue'
 
 const routes = [
-  // ─── PUBLIQUES ───────────────────────────────────────
+  // PUBLIC
+  { path: '/', name: 'Home', component: Home },
+  { path: '/catalogue', name: 'Catalogue', component: Catalogue },
+  { path: '/catalogue/:id', name: 'BookDetail', component: BookDetail },
+  { path: '/search', name: 'Search', component: Search },
   {
-    path: '/',
-    name: 'Accueil',
-    component: Accueil,
-    meta: { requiresAuth: false }
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: { guestOnly: true }
   },
   {
-    path: '/catalogue',
-    name: 'Catalogue',
-    component: Catalogue,
-    meta: { requiresAuth: false }
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: { guestOnly: true }
   },
   {
-    path: '/catalogue/:id',
-    name: 'DetailLivre',
-    component: DetailLivre,
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/recherche',
-    name: 'Recherche',
-    component: Recherche,
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/inscription',
-    name: 'Inscription',
-    component: Inscription,
-    meta: { requiresAuth: false, guestOnly: true }
-  },
-  {
-    path: '/connexion',
-    name: 'Connexion',
-    component: Connexion,
-    meta: { requiresAuth: false, guestOnly: true }
-  },
-  {
-    path: '/mot-de-passe-oublie',
-    name: 'MotDePasseOublie',
-    component: MotDePasseOublie,
-    meta: { requiresAuth: false, guestOnly: true }
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword,
+    meta: { guestOnly: true }
   },
 
-  // ─── ADHÉRENT ─────────────────────────────────────────
+  // MEMBER
+  { path: '/member', redirect: '/member/dashboard' },
   {
-    path: '/espace',
-    redirect: '/espace/dashboard'
+    path: '/member/dashboard',
+    name: 'MemberDashboard',
+    component: MemberDashboard,
+    meta: { requiresAuth: true, role: 'member' }
   },
   {
-    path: '/espace/dashboard',
-    name: 'AdherentDashboard',
-    component: AdherentDashboard,
-    meta: { requiresAuth: true, role: 'adherent' }
+    path: '/member/loans',
+    name: 'MyLoans',
+    component: MyLoans,
+    meta: { requiresAuth: true, role: 'member' }
   },
   {
-    path: '/espace/emprunts',
-    name: 'MesEmprunts',
-    component: MesEmprunts,
-    meta: { requiresAuth: true, role: 'adherent' }
+    path: '/member/history',
+    name: 'MyHistory',
+    component: MyHistory,
+    meta: { requiresAuth: true, role: 'member' }
   },
   {
-    path: '/espace/historique',
-    name: 'MonHistorique',
-    component: MonHistorique,
-    meta: { requiresAuth: true, role: 'adherent' }
+    path: '/member/reservations',
+    name: 'MyReservations',
+    component: MyReservations,
+    meta: { requiresAuth: true, role: 'member' }
   },
   {
-    path: '/espace/reservations',
-    name: 'MesReservations',
-    component: MesReservations,
-    meta: { requiresAuth: true, role: 'adherent' }
+    path: '/member/profile',
+    name: 'MyProfile',
+    component: MyProfile,
+    meta: { requiresAuth: true, role: 'member' }
   },
   {
-    path: '/espace/profil',
-    name: 'MonProfil',
-    component: MonProfil,
-    meta: { requiresAuth: true, role: 'adherent' }
-  },
-  {
-    path: '/espace/notifications',
-    name: 'MesNotifications',
-    component: MesNotifications,
-    meta: { requiresAuth: true, role: 'adherent' }
+    path: '/member/notifications',
+    name: 'MyNotifications',
+    component: MyNotifications,
+    meta: { requiresAuth: true, role: 'member' }
   },
 
-  // ─── ADMIN ────────────────────────────────────────────
-  {
-    path: '/admin',
-    redirect: '/admin/dashboard'
-  },
+  // ADMIN
+  { path: '/admin', redirect: '/admin/dashboard' },
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -138,21 +112,21 @@ const routes = [
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/livres',
-    name: 'AdminLivres',
-    component: AdminLivres,
+    path: '/admin/books',
+    name: 'AdminBooks',
+    component: AdminBooks,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/livres/ajouter',
-    name: 'AdminAjouterLivre',
-    component: AdminAjouterLivre,
+    path: '/admin/books/add',
+    name: 'AdminAddBook',
+    component: AdminAddBook,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/livres/modifier/:id',
-    name: 'AdminModifierLivre',
-    component: AdminModifierLivre,
+    path: '/admin/books/edit/:id',
+    name: 'AdminEditBook',
+    component: AdminEditBook,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
@@ -162,33 +136,33 @@ const routes = [
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/adherents',
-    name: 'AdminAdherents',
-    component: AdminAdherents,
+    path: '/admin/members',
+    name: 'AdminMembers',
+    component: AdminMembers,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/adherents/:id',
-    name: 'AdminDetailAdherent',
-    component: AdminDetailAdherent,
+    path: '/admin/members/:id',
+    name: 'AdminMemberDetail',
+    component: AdminMemberDetail,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/emprunts',
-    name: 'AdminEmprunts',
-    component: AdminEmprunts,
+    path: '/admin/loans',
+    name: 'AdminLoans',
+    component: AdminLoans,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/emprunts/retards',
-    name: 'AdminEmpruntsRetard',
-    component: AdminEmpruntsRetard,
+    path: '/admin/loans/overdue',
+    name: 'AdminLoansOverdue',
+    component: AdminLoansOverdue,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/emprunts/retour',
-    name: 'AdminRetour',
-    component: AdminRetour,
+    path: '/admin/loans/return',
+    name: 'AdminReturn',
+    component: AdminReturn,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
@@ -198,71 +172,51 @@ const routes = [
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/relances',
-    name: 'AdminRelances',
-    component: AdminRelances,
+    path: '/admin/notifications',
+    name: 'AdminNotifications',
+    component: AdminNotifications,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/relances/historique',
-    name: 'AdminHistoriqueRelances',
-    component: AdminHistoriqueRelances,
+    path: '/admin/notifications/history',
+    name: 'AdminNotificationsHistory',
+    component: AdminNotificationsHistory,
     meta: { requiresAuth: true, role: 'admin' }
   },
   {
-    path: '/admin/rapports',
-    name: 'AdminRapports',
-    component: AdminRapports,
+    path: '/admin/reports',
+    name: 'AdminReports',
+    component: AdminReports,
     meta: { requiresAuth: true, role: 'admin' }
   },
 
-  // ─── SYSTÈME ──────────────────────────────────────────
-  {
-    path: '/403',
-    name: 'Interdit',
-    component: Interdit
-  },
-  {
-    path: '/500',
-    name: 'Erreur',
-    component: Erreur
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
-  }
+  // SYSTEM
+  { path: '/403', name: 'Forbidden', component: Forbidden },
+  { path: '/500', name: 'ServerError', component: ServerError },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  // Retour en haut de page à chaque navigation
-  scrollBehavior() {
-    return { top: 0 }
-  }
+  scrollBehavior: () => ({ top: 0 })
 })
 
-// ─── GARDE DE NAVIGATION ──────────────────────────────
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const estConnecte = authStore.estConnecte
-  const roleUser = authStore.role
+  const auth = useAuthStore()
 
-  // Page nécessite connexion
-  if (to.meta.requiresAuth && !estConnecte) {
-    return next({ name: 'Connexion' })
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
+    return next({ name: 'Login' })
   }
 
-  // Page réservée aux non-connectés (ex: login, register)
-  if (to.meta.guestOnly && estConnecte) {
-    if (roleUser === 'admin') return next({ name: 'AdminDashboard' })
-    return next({ name: 'AdherentDashboard' })
+  if (to.meta.guestOnly && auth.isLoggedIn) {
+    return next(
+      auth.isAdmin ? { name: 'AdminDashboard' } : { name: 'MemberDashboard' }
+    )
   }
 
-  // Vérification du rôle
-  if (to.meta.role && to.meta.role !== roleUser) {
-    return next({ name: 'Interdit' })
+  if (to.meta.role && to.meta.role !== auth.role) {
+    return next({ name: 'Forbidden' })
   }
 
   next()

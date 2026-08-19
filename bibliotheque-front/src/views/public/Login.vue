@@ -4,35 +4,17 @@
       <h1>Connexion</h1>
       <p class="subtitle">Connectez-vous à votre espace bibliothèque</p>
 
-      <Alerte
-        v-if="messageErreur"
-        :message="messageErreur"
-        type="erreur"
-        :duree="0"
-        @fermer="messageErreur = ''"
-      />
+      <Alerte v-if="messageErreur" :message="messageErreur" type="erreur" :duree="0" @fermer="messageErreur = ''" />
 
       <form @submit.prevent="soumettreFormulaire" class="auth-form">
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="form.email"
-            type="email"
-            placeholder="votre@email.com"
-            required
-          />
+          <input id="email" v-model="form.email" type="email" placeholder="votre@email.com" required />
         </div>
 
         <div class="form-group">
           <label for="motDePasse">Mot de passe</label>
-          <input
-            id="motDePasse"
-            v-model="form.motDePasse"
-            type="password"
-            placeholder="Votre mot de passe"
-            required
-          />
+          <input id="motDePasse" v-model="form.motDePasse" type="password" placeholder="Votre mot de passe" required />
         </div>
 
         <div class="form-actions">
@@ -79,17 +61,15 @@ async function soumettreFormulaire() {
     return
   }
 
-  const resultat = await authStore.connexion(form.email, form.motDePasse)
-
-  if (!resultat.succes) {
-    messageErreur.value = resultat.message || 'Connexion impossible.'
+  const result = await authStore.login(form.email, form.password)
+  if (!result.success) {
+    errorMessage.value = result.message
     return
   }
-
-  if (authStore.role === 'admin') {
+  if (authStore.isAdmin) {
     router.push('/admin/dashboard')
   } else {
-    router.push('/espace/dashboard')
+    router.push('/member/dashboard')
   }
 }
 </script>

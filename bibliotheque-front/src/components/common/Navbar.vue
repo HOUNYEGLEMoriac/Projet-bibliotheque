@@ -2,90 +2,86 @@
   <nav class="navbar">
     <div class="navbar-container">
 
-      <!-- ─── LOGO ─────────────────────────────────── -->
       <RouterLink to="/" class="navbar-logo">
-        📚 BiblioCommune
+        BiblioCommune
       </RouterLink>
 
-      <!-- ─── LIENS NAVIGATION ──────────────────────── -->
       <ul class="navbar-liens">
         <li>
           <RouterLink to="/catalogue">Catalogue</RouterLink>
         </li>
         <li>
-          <RouterLink to="/recherche">Recherche</RouterLink>
+          <RouterLink to="/search">Recherche</RouterLink>
         </li>
       </ul>
 
-      <!-- ─── ACTIONS DROITE ────────────────────────── -->
       <div class="navbar-actions">
 
-        <!-- Non connecté -->
-        <template v-if="!authStore.estConnecte">
-          <RouterLink to="/connexion" class="btn btn-outline">
+        <template v-if="!authStore.isLoggedIn">
+          <RouterLink to="/login" class="btn btn-outline">
             Connexion
           </RouterLink>
-          <RouterLink to="/inscription" class="btn btn-primary">
+          <RouterLink to="/register" class="btn btn-primary">
             S'inscrire
           </RouterLink>
         </template>
 
-        <!-- Connecté -->
         <template v-else>
-          <!-- Notifications -->
+
           <RouterLink
-            v-if="authStore.estAdherent"
-            to="/espace/notifications"
-            class="btn-icone"
+            v-if="authStore.isMember"
+            to="/member/notifications"
+            class="btn-icon"
           >
-            🔔
-            <span v-if="nbNotifications > 0" class="badge">
-              {{ nbNotifications }}
+            Notifications
+            <span v-if="unreadCount > 0" class="badge">
+              {{ unreadCount }}
             </span>
           </RouterLink>
 
-          <!-- Menu utilisateur -->
-          <div class="menu-utilisateur" @click="toggleMenu">
+          <div class="user-menu" @click="toggleMenu">
             <span class="avatar">
-              {{ initiales }}
+              {{ authStore.initials }}
             </span>
-            <span class="nom-user">{{ authStore.nomComplet }}</span>
+            <span class="user-name">{{ authStore.fullName }}</span>
             <span>▾</span>
 
-            <!-- Dropdown -->
-            <div v-if="menuOuvert" class="dropdown">
+            <div v-if="menuOpen" class="dropdown">
               <RouterLink
-                v-if="authStore.estAdherent"
-                to="/espace/dashboard"
-                @click="menuOuvert = false"
+                v-if="authStore.isMember"
+                to="/member/dashboard"
+                @click="menuOpen = false"
               >
                 Mon espace
               </RouterLink>
               <RouterLink
-                v-if="authStore.estAdmin"
+                v-if="authStore.isAdmin"
                 to="/admin/dashboard"
-                @click="menuOuvert = false"
+                @click="menuOpen = false"
               >
                 Administration
               </RouterLink>
               <RouterLink
-                v-if="authStore.estAdherent"
-                to="/espace/profil"
-                @click="menuOuvert = false"
+                v-if="authStore.isMember"
+                to="/member/profile"
+                @click="menuOpen = false"
               >
                 Mon profil
               </RouterLink>
               <hr />
-              <button @click="seDeconnecter" class="btn-deconnexion">
+              <button @click="handleLogout" class="btn-logout">
                 Se déconnecter
               </button>
             </div>
           </div>
+
         </template>
       </div>
     </div>
   </nav>
+
 </template>
+
 
 <script setup>
 import { ref, computed } from 'vue'
@@ -97,26 +93,20 @@ const router = useRouter()
 const authStore = useAuthStore()
 const notifStore = useNotificationsStore()
 
-const menuOuvert = ref(false)
+const menuOpen = ref(false)
 
-const nbNotifications = computed(() => notifStore.nbNonLues)
-
-const initiales = computed(() => {
-  if (!authStore.user) return '?'
-  const p = authStore.user.prenom?.[0] || ''
-  const n = authStore.user.nom?.[0] || ''
-  return (p + n).toUpperCase()
-})
+const unreadCount = computed(() => notifStore.unreadCount)
 
 function toggleMenu() {
-  menuOuvert.value = !menuOuvert.value
+  menuOpen.value = !menuOpen.value
 }
 
-async function seDeconnecter() {
-  authStore.deconnexion()
-  menuOuvert.value = false
+async function handleLogout() {
+  authStore.logout()
+  menuOpen.value = false
   router.push('/')
 }
+
 </script>
 
 <style scoped>
@@ -191,7 +181,7 @@ async function seDeconnecter() {
   background: transparent;
 }
 
-.btn-icone {
+.btn-icon {
   position: relative;
   font-size: 1.3rem;
   cursor: pointer;
@@ -213,7 +203,7 @@ async function seDeconnecter() {
   justify-content: center;
 }
 
-.menu-utilisateur {
+.user-menu {
   position: relative;
   display: flex;
   align-items: center;
@@ -224,7 +214,7 @@ async function seDeconnecter() {
   transition: background 0.2s;
 }
 
-.menu-utilisateur:hover {
+.user-menu:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -240,7 +230,7 @@ async function seDeconnecter() {
   font-size: 0.85rem;
 }
 
-.nom-user {
+.user-name {
   font-size: 0.9rem;
 }
 
@@ -283,7 +273,7 @@ async function seDeconnecter() {
   border-top: 1px solid #eee;
 }
 
-.btn-deconnexion {
+.btn-logout {
   color: #e53935 !important;
   font-weight: 500;
 }

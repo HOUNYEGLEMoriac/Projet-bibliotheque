@@ -1,36 +1,40 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { notificationsService } from '@/services/notificationsService'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const notifications = ref([])
+  const loading = ref(false)
 
-  const nbNonLues = computed(
-    () => notifications.value.filter((n) => !n.lue).length
+  const unreadCount = computed(
+    () => notifications.value.filter((n) => !n.is_read).length
   )
 
-  function ajouterNotification(notif) {
-    notifications.value.unshift({
-      id: Date.now(),
-      lue: false,
-      date: new Date(),
-      ...notif
-    })
+  async function fetchMine() {
+    loading.value = true
+    try {
+      const res = await notificationsService.getMine()
+      notifications.value = res.data
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loading.value = false
+    }
   }
 
-  function marquerCommeLue(id) {
-    const notif = notifications.value.find((n) => n.id === id)
-    if (notif) notif.lue = true
+  async function markRead(id) {
+    await notificationsService.markRead(id)
+    const n = notifications.value.find((n) => n.id === id)
+    if (n) n.is_read = true
   }
 
-  function toutMarquerCommeLu() {
-    notifications.value.forEach((n) => (n.lue = true))
+  async function markAllRead() {
+    await notificationsService.markAllRead()
+    notifications.value.forEach((n) => (n.is_read = true))
   }
 
   return {
-    notifications,
-    nbNonLues,
-    ajouterNotification,
-    marquerCommeLue,
-    toutMarquerCommeLu
+    notifications, loading, unreadCount,
+    fetchMine, markRead, markAllRead
   }
 })

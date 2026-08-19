@@ -278,15 +278,12 @@ async function soumettreFormulaire() {
     motDePasse: form.motDePasse
   }
 
-  const resultat = await authStore.inscription(donnees)
-
-  if (!resultat.succes) {
-    messageErreur.value = resultat.message || "Erreur lors de l'inscription."
-    return
-  }
-
-  router.push('/espace/dashboard')
+  const result = await authStore.register(data)
+if (!result.success) {
+  errorMessage.value = result.message
+  return
 }
+router.push('/member/dashboard')
 </script>
 
 <style scoped>
