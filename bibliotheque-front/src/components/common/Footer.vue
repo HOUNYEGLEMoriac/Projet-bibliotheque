@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-section">
-        <h3>📚 BiblioCommune</h3>
+        <h3> BiblioCommune</h3>
         <p>Votre bibliothèque communautaire en ligne.</p>
       </div>
 

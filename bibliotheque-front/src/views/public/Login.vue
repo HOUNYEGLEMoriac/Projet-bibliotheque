@@ -31,7 +31,7 @@
 
       <p class="auth-footer">
         Pas encore de compte ?
-        <RouterLink to="/inscription">Créer un compte</RouterLink>
+        <RouterLink to="/register">Créer un compte</RouterLink>
       </p>
     </div>
   </section>
