@@ -284,6 +284,7 @@ if (!result.success) {
   return
 }
 router.push('/member/dashboard')
+}
 </script>
 
 <style scoped>
