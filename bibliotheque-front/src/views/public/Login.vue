@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-actions">
-          <RouterLink to="/mot-de-passe-oublie" class="forgot-link">
+          <RouterLink to="/forgot-password" class="forgot-link">
             Mot de passe oublié ?
           </RouterLink>
         </div>

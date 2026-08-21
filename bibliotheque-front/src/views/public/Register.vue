@@ -192,7 +192,7 @@
 
       <p class="auth-footer">
         Déjà inscrit ?
-        <RouterLink to="/connexion">Se connecter</RouterLink>
+        <RouterLink to="/login">Se connecter</RouterLink>
       </p>
     </div>
   </section>

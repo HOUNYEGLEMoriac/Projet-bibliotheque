@@ -29,15 +29,33 @@
         <template v-else>
 
           <RouterLink
-            v-if="authStore.isMember"
-            to="/member/notifications"
-            class="btn-icon"
-          >
-            Notifications
-            <span v-if="unreadCount > 0" class="badge">
-              {{ unreadCount }}
-            </span>
-          </RouterLink>
+  v-if="authStore.isMember"
+  to="/member/notifications"
+  class="btn-icon"
+  title="Notifications"
+  aria-label="Notifications"
+>
+  <!-- Icône Cloche -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+  </svg>
+
+  <!-- Badge pour le nombre de notifications non lues -->
+  <span v-if="unreadCount > 0" class="badge">
+    {{ unreadCount }}
+  </span>
+</RouterLink>
 
           <div class="user-menu" @click="toggleMenu">
             <span class="avatar">
@@ -183,9 +201,30 @@ async function handleLogout() {
 
 .btn-icon {
   position: relative;
-  font-size: 1.3rem;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: white;
   text-decoration: none;
+}
+
+.btn-icon:hover {
+  color: #2563eb; /* Couleur au survol */
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #ef4444; /* Rouge */
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 9999px; /* Forme de pilule/cercle */
+  min-width: 18px;
+  text-align: center;
 }
 
 .badge {

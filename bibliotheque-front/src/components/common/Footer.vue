@@ -11,15 +11,15 @@
         <ul>
           <li><RouterLink to="/">Accueil</RouterLink></li>
           <li><RouterLink to="/catalogue">Catalogue</RouterLink></li>
-          <li><RouterLink to="/recherche">Recherche</RouterLink></li>
+          <li><RouterLink to="/search">Recherche</RouterLink></li>
         </ul>
       </div>
 
       <div class="footer-section">
         <h4>Mon compte</h4>
         <ul>
-          <li><RouterLink to="/connexion">Connexion</RouterLink></li>
-          <li><RouterLink to="/inscription">Inscription</RouterLink></li>
+          <li><RouterLink to="/login">Connexion</RouterLink></li>
+          <li><RouterLink to="/register">Inscription</RouterLink></li>
         </ul>
       </div>
     </div>
