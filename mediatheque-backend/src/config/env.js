@@ -1,8 +1,6 @@
 import 'dotenv/config';
 
-// Liste des variables obligatoires. Si l'une manque, le serveur ne
-// démarre pas — mieux vaut planter au boot qu'au premier appel API
-// qui en a besoin (ex: la première requête Supabase).
+
 const required = [
   'SUPABASE_URL',
   'SUPABASE_SERVICE_ROLE_KEY',
