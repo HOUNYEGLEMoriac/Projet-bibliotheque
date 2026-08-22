@@ -4,188 +4,84 @@
       <h1>Créer un compte</h1>
       <p class="subtitle">Rejoignez la bibliothèque communautaire</p>
 
-      <Alerte
-        v-if="messageErreur"
-        :message="messageErreur"
-        type="erreur"
-        :duree="0"
-        @fermer="messageErreur = ''"
-      />
+      <Alerte v-if="errorMessage" :message="errorMessage" type="erreur" :duree="0" @fermer="errorMessage = ''" />
 
-      <Alerte
-        v-if="messageSucces"
-        :message="messageSucces"
-        type="succes"
-        :duree="0"
-      />
-
-      <form @submit.prevent="soumettreFormulaire" class="auth-form">
+      <form @submit.prevent="handleSubmit" class="auth-form">
 
         <div class="form-row">
           <div class="form-group">
-            <label for="prenom">Prénom</label>
-            <input
-              id="prenom"
-              v-model="form.prenom"
-              type="text"
-              placeholder="Jean"
-              required
-            />
-            <span v-if="erreurs.prenom" class="erreur-champ">
-              {{ erreurs.prenom }}
-            </span>
+            <label for="first_name">Prénom *</label>
+            <input id="first_name" v-model="form.first_name" type="text" placeholder="Jean" required />
+            <span v-if="errors.first_name" class="erreur-champ">{{ errors.first_name }}</span>
           </div>
 
           <div class="form-group">
-            <label for="nom">Nom</label>
-            <input
-              id="nom"
-              v-model="form.nom"
-              type="text"
-              placeholder="Dupont"
-              required
-            />
-            <span v-if="erreurs.nom" class="erreur-champ">
-              {{ erreurs.nom }}
-            </span>
+            <label for="last_name">Nom *</label>
+            <input id="last_name" v-model="form.last_name" type="text" placeholder="Dupont" required />
+            <span v-if="errors.last_name" class="erreur-champ">{{ errors.last_name }}</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="form.email"
-            type="email"
-            placeholder="jean.dupont@email.com"
-            required
-          />
-          <span v-if="erreurs.email" class="erreur-champ">
-            {{ erreurs.email }}
-          </span>
+          <label for="email">Email *</label>
+          <input id="email" v-model="form.email" type="email" placeholder="jean.dupont@email.com" required />
+          <span v-if="errors.email" class="erreur-champ">{{ errors.email }}</span>
         </div>
 
         <div class="form-group">
-          <label for="telephone">Téléphone</label>
-          <input
-            id="telephone"
-            v-model="form.telephone"
-            type="tel"
-            placeholder="06 12 34 56 78"
-          />
+          <label for="phone">Téléphone</label>
+          <input id="phone" v-model="form.phone" type="tel" placeholder="06 12 34 56 78" />
         </div>
 
         <div class="form-group">
-          <label for="adresse">Adresse</label>
-          <input
-            id="adresse"
-            v-model="form.adresse"
-            type="text"
-            placeholder="12 rue des Lilas, Paris"
-          />
+          <label for="address">Adresse</label>
+          <input id="address" v-model="form.address" type="text" placeholder="12 rue des Lilas, Paris" />
         </div>
 
         <div class="form-group">
-          <label for="motDePasse">Mot de passe</label>
+          <label for="password">Mot de passe *</label>
           <div class="input-password">
-            <input
-              id="motDePasse"
-              v-model="form.motDePasse"
-              :type="voirMdp ? 'text' : 'password'"
-              placeholder="Minimum 8 caractères"
-              required
-            />
-            <button
-  type="button"
-  @click="voirMdp = !voirMdp"
-  class="btn-eye"
-  title="Afficher/Masquer le mot de passe"
->
-  <!-- Icône œil barré (Quand le mot de passe est affiché) -->
-  <svg
-    v-if="voirMdp"
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-    <line x1="1" y1="1" x2="23" y2="23"></line>
-  </svg>
+            <input id="password" v-model="form.password" :type="showPassword ? 'text' : 'password'"
+              placeholder="Minimum 8 caractères" required />
+            <button type="button" @click="voirMdp = !voirMdp" class="btn-eye" title="Afficher/Masquer le mot de passe">
+              <!-- Icône œil barré (Quand le mot de passe est affiché) -->
+              <svg v-if="voirMdp" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                </path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
 
-  <!-- Icône œil ouvert (Quand le mot de passe est masqué) -->
-  <svg
-    v-else
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-</button>
+              <!-- Icône œil ouvert (Quand le mot de passe est masqué) -->
+              <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
           </div>
-          <span v-if="erreurs.motDePasse" class="erreur-champ">
-            {{ erreurs.motDePasse }}
-          </span>
-          <div class="force-mdp" v-if="form.motDePasse">
-            <div
-              class="barre"
-              :class="classeForceMdp"
-              :style="{ width: pourcentageForceMdp + '%' }"
-            ></div>
-            <span class="label-force">{{ labelForceMdp }}</span>
-          </div>
+          <span v-if="errors.password" class="erreur-champ">{{ errors.password }}</span>
         </div>
 
         <div class="form-group">
-          <label for="confirmerMdp">Confirmer le mot de passe</label>
-          <input
-            id="confirmerMdp"
-            v-model="form.confirmerMdp"
-            type="password"
-            placeholder="Répétez votre mot de passe"
-            required
-          />
-          <span v-if="erreurs.confirmerMdp" class="erreur-champ">
-            {{ erreurs.confirmerMdp }}
-          </span>
+          <label for="confirmPassword">Confirmer le mot de passe *</label>
+          <input id="confirmPassword" v-model="form.confirmPassword" type="password"
+            placeholder="Répétez votre mot de passe" required />
+          <span v-if="errors.confirmPassword" class="erreur-champ">{{ errors.confirmPassword }}</span>
         </div>
 
         <div class="form-group checkbox-group">
           <label class="checkbox-label">
-            <input
-              type="checkbox"
-              v-model="form.accepterConditions"
-              required
-            />
+            <input type="checkbox" v-model="form.acceptTerms" required />
             <span>
-              J'accepte les
-              <a href="#" @click.prevent>conditions d'utilisation</a>
+              J'accepte les <a href="#" @click.prevent>conditions d'utilisation</a>
             </span>
           </label>
-          <span v-if="erreurs.accepterConditions" class="erreur-champ">
-            {{ erreurs.accepterConditions }}
-          </span>
         </div>
 
-        <button
-          type="submit"
-          class="btn-submit"
-          :disabled="authStore.chargement"
-        >
-          <span v-if="!authStore.chargement">Créer mon compte</span>
+        <button type="submit" class="btn-submit" :disabled="authStore.loading">
+          <span v-if="!authStore.loading">Créer mon compte</span>
           <span v-else>Création en cours...</span>
         </button>
       </form>
@@ -199,7 +95,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Alerte from '@/components/common/Alerte.vue'
@@ -207,116 +103,82 @@ import Alerte from '@/components/common/Alerte.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const messageErreur = ref('')
-const messageSucces = ref('')
-const voirMdp = ref(false)
+const errorMessage = ref('')
+const showPassword = ref(false)
 
 const form = reactive({
-  prenom: '',
-  nom: '',
+  first_name: '',
+  last_name: '',
   email: '',
-  telephone: '',
-  adresse: '',
-  motDePasse: '',
-  confirmerMdp: '',
-  accepterConditions: false
+  phone: '',
+  address: '',
+  password: '',
+  confirmPassword: '',
+  acceptTerms: false
 })
 
-const erreurs = reactive({
-  prenom: '',
-  nom: '',
+const errors = reactive({
+  first_name: '',
+  last_name: '',
   email: '',
-  motDePasse: '',
-  confirmerMdp: '',
-  accepterConditions: ''
+  password: '',
+  confirmPassword: ''
 })
 
-// ─── FORCE DU MOT DE PASSE ────────────────────────────
-const scoreForceMdp = computed(() => {
-  const mdp = form.motDePasse
-  if (!mdp) return 0
-  let score = 0
-  if (mdp.length >= 8) score++
-  if (/[A-Z]/.test(mdp)) score++
-  if (/[0-9]/.test(mdp)) score++
-  if (/[^A-Za-z0-9]/.test(mdp)) score++
-  return score
-})
+function validateForm() {
+  let valid = true
+  Object.keys(errors).forEach((k) => (errors[k] = ''))
 
-const pourcentageForceMdp = computed(() => (scoreForceMdp.value / 4) * 100)
-
-const labelForceMdp = computed(() => {
-  const labels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
-  return labels[scoreForceMdp.value]
-})
-
-const classeForceMdp = computed(() => {
-  const classes = ['tres-faible', 'faible', 'moyen', 'fort', 'tres-fort']
-  return classes[scoreForceMdp.value]
-})
-
-// ─── VALIDATION ───────────────────────────────────────
-function validerFormulaire() {
-  let valide = true
-
-  Object.keys(erreurs).forEach((k) => (erreurs[k] = ''))
-
-  if (!form.prenom.trim()) {
-    erreurs.prenom = 'Le prénom est requis.'
-    valide = false
+  if (!form.first_name.trim()) {
+    errors.first_name = 'Le prénom est requis.'
+    valid = false
   }
 
-  if (!form.nom.trim()) {
-    erreurs.nom = 'Le nom est requis.'
-    valide = false
+  if (!form.last_name.trim()) {
+    errors.last_name = 'Le nom est requis.'
+    valid = false
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!form.email || !emailRegex.test(form.email)) {
-    erreurs.email = 'Adresse email invalide.'
-    valide = false
+    errors.email = 'Adresse email invalide.'
+    valid = false
   }
 
-  if (form.motDePasse.length < 8) {
-    erreurs.motDePasse = 'Le mot de passe doit contenir au moins 8 caractères.'
-    valide = false
+  if (form.password.length < 8) {
+    errors.password = 'Le mot de passe doit contenir au moins 8 caractères.'
+    valid = false
   }
 
-  if (form.motDePasse !== form.confirmerMdp) {
-    erreurs.confirmerMdp = 'Les mots de passe ne correspondent pas.'
-    valide = false
+  if (form.password !== form.confirmPassword) {
+    errors.confirmPassword = 'Les mots de passe ne correspondent pas.'
+    valid = false
   }
 
-  if (!form.accepterConditions) {
-    erreurs.accepterConditions = "Vous devez accepter les conditions d'utilisation."
-    valide = false
-  }
-
-  return valide
+  return valid
 }
 
-// ─── SOUMISSION ───────────────────────────────────────
-async function soumettreFormulaire() {
-  messageErreur.value = ''
-  messageSucces.value = ''
+async function handleSubmit() {
+  errorMessage.value = ''
+  if (!validateForm()) return
 
-  if (!validerFormulaire()) return
-
-  const donnees = {
-    prenom: form.prenom.trim(),
-    nom: form.nom.trim(),
-    email: form.email,
-    telephone: form.telephone,
-    adresse: form.adresse,
-    motDePasse: form.motDePasse
+  const payload = {
+    first_name: form.first_name.trim(),
+    last_name: form.last_name.trim(),
+    email: form.email.trim(),
+    phone: form.phone.trim(),
+    address: form.address.trim(),
+    password: form.password
   }
 
-  const result = await authStore.register(data)
-if (!result.success) {
-  errorMessage.value = result.message
-  return
-}
-router.push('/member/dashboard')
+  const result = await authStore.register(payload)
+
+  if (!result.success) {
+    errorMessage.value = result.message || "Erreur lors de l'inscription."
+    return
+  }
+
+  router.push('/member/dashboard')
 }
 </script>
 
@@ -420,35 +282,9 @@ input:focus {
   font-weight: 600;
 }
 
-.force-mdp {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 0.3rem;
-}
-
-.barre {
-  height: 5px;
-  border-radius: 4px;
-  transition: width 0.3s, background-color 0.3s;
-  max-width: 200px;
-}
-
-.tres-faible { background: #e53935; }
-.faible      { background: #fb8c00; }
-.moyen       { background: #fdd835; }
-.fort        { background: #43a047; }
-.tres-fort   { background: #1b5e20; }
-
-.label-force {
-  font-size: 0.8rem;
-  color: #555;
-}
-
 .checkbox-group {
   flex-direction: row;
   align-items: flex-start;
-  gap: 0;
 }
 
 .checkbox-label {
@@ -457,11 +293,6 @@ input:focus {
   gap: 0.5rem;
   font-weight: normal;
   cursor: pointer;
-}
-
-.checkbox-label a {
-  color: #1a237e;
-  text-decoration: underline;
 }
 
 .btn-submit {
@@ -514,6 +345,3 @@ input:focus {
   color: #111827;
 }
 </style>
-
-
-

@@ -4,17 +4,35 @@
       <h1>Connexion</h1>
       <p class="subtitle">Connectez-vous à votre espace bibliothèque</p>
 
-      <Alerte v-if="messageErreur" :message="messageErreur" type="erreur" :duree="0" @fermer="messageErreur = ''" />
+      <Alerte
+        v-if="errorMessage"
+        :message="errorMessage"
+        type="erreur"
+        :duree="0"
+        @fermer="errorMessage = ''"
+      />
 
-      <form @submit.prevent="soumettreFormulaire" class="auth-form">
+      <form @submit.prevent="handleSubmit" class="auth-form">
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" v-model="form.email" type="email" placeholder="votre@email.com" required />
+          <input
+            id="email"
+            v-model="form.email"
+            type="email"
+            placeholder="votre@email.com"
+            required
+          />
         </div>
 
         <div class="form-group">
-          <label for="motDePasse">Mot de passe</label>
-          <input id="motDePasse" v-model="form.motDePasse" type="password" placeholder="Votre mot de passe" required />
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            v-model="form.password"
+            type="password"
+            placeholder="Votre mot de passe"
+            required
+          />
         </div>
 
         <div class="form-actions">
@@ -23,8 +41,8 @@
           </RouterLink>
         </div>
 
-        <button type="submit" class="btn-submit" :disabled="authStore.chargement">
-          <span v-if="!authStore.chargement">Se connecter</span>
+        <button type="submit" class="btn-submit" :disabled="authStore.loading">
+          <span v-if="!authStore.loading">Se connecter</span>
           <span v-else>Connexion en cours...</span>
         </button>
       </form>
@@ -46,26 +64,28 @@ import Alerte from '@/components/common/Alerte.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const messageErreur = ref('')
+const errorMessage = ref('')
 
 const form = reactive({
   email: '',
-  motDePasse: ''
+  password: ''
 })
 
-async function soumettreFormulaire() {
-  messageErreur.value = ''
+async function handleSubmit() {
+  errorMessage.value = ''
 
-  if (!form.email || !form.motDePasse) {
-    messageErreur.value = 'Veuillez remplir tous les champs.'
+  if (!form.email || !form.password) {
+    errorMessage.value = 'Veuillez remplir tous les champs.'
     return
   }
 
   const result = await authStore.login(form.email, form.password)
+
   if (!result.success) {
-    errorMessage.value = result.message
+    errorMessage.value = result.message || 'Connexion impossible.'
     return
   }
+
   if (authStore.isAdmin) {
     router.push('/admin/dashboard')
   } else {
